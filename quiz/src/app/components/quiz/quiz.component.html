@@ -1,0 +1,25 @@
+<div class="quiz-container" [@fadeInOut]>
+  <h2 class="topic-header">{{ topic.name }}</h2>
+
+  <div class="question" [@fadeInOut]>
+    <h3>{{ currentQuestion.question_text }}</h3>
+  </div>
+
+  <div class="choices">
+    <button
+      *ngFor="let choice of currentQuestion.choices"
+      class="choice-btn"
+      [ngClass]="{
+        correct: isCorrect(choice),
+        wrong: isWrong(choice)
+      }"
+      (click)="selectChoice(choice)"
+    >
+      {{ choice }}
+    </button>
+  </div>
+</div>
+
+<!-- Tap anywhere to go next -->
+<div class="next-overlay" *ngIf="isAnswered" (click)="nextQuestion()"></div>
+

@@ -1,0 +1,10 @@
+<div class="topic-container">
+  <h1>Choose a Topic</h1>
+  <div class="topic-grid">
+    <button *ngFor="let topic of quiz.topics$ | async"
+            (click)="selectTopic(topic.name)">
+      {{ topic.name }}
+    </button>
+  </div>
+</div>
+
