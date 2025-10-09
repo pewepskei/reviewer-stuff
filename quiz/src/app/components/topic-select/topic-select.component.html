@@ -1,10 +1,28 @@
 <div class="topic-container">
-  <h1>Choose a Topic</h1>
-  <div class="topic-grid">
-    <button *ngFor="let topic of quiz.topics$ | async"
-            (click)="selectTopic(topic.name)">
+  <h1>Select a Topic</h1>
+
+  <div class="topics">
+    <button
+      *ngFor="let topic of quiz.topics$ | async"
+      (click)="selectTopic(topic.name)"
+      class="topic-btn"
+    >
       {{ topic.name }}
     </button>
+  </div>
+</div>
+
+<!-- Limit selection modal -->
+<div class="limit-overlay" *ngIf="selectedTopic">
+  <div class="limit-modal">
+    <h2>{{ selectedTopic }}</h2>
+    <p>Select number of questions</p>
+    <div class="limit-buttons">
+      <button (click)="startQuiz('50')">50</button>
+      <button (click)="startQuiz('100')">100</button>
+      <button (click)="startQuiz('unli')">Unlimited</button>
+    </div>
+    <button class="cancel" (click)="cancel()">Cancel</button>
   </div>
 </div>
 

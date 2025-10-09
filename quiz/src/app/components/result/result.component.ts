@@ -11,7 +11,15 @@ import { QuizService } from '../../services/quiz.service';
   styleUrls: ['./result.component.scss']
 })
 export class ResultComponent {
-  constructor(public quiz: QuizService, private router: Router) {}
+  topic = '';
+  score = 0;
+  total = 0;
+
+  constructor(public quiz: QuizService, private router: Router) {
+    this.topic = quiz.currentTopic;
+    this.score = quiz.score;
+    this.total = quiz.totalQuestions;
+  }
 
   restart() {
     this.quiz.score = 0;

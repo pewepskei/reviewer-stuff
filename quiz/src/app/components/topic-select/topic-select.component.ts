@@ -11,16 +11,26 @@ import { QuizService } from '../../services/quiz.service';
   styleUrls: ['./topic-select.component.scss']
 })
 export class TopicSelectComponent {
+  selectedTopic: string | null = null;
+
   constructor(public quiz: QuizService, private router: Router) {}
 
   selectTopic(topic: string) {
-    const limit = prompt('How many questions? (50, 100, or unli)', '50') || '50';
+    this.selectedTopic = topic;
+  }
 
+  startQuiz(limit: string) {
+    const topic = this.selectedTopic!;
     this.quiz.fetchQuestions(topic, limit).subscribe((data) => {
-      // ✅ 'data' is the response from your service
       this.router.navigate(['/quiz'], {
-        state: { topic: topic, questions: data }
+        state: { topic: topic, questions: data },
       });
+      this.selectedTopic = null; // reset after navigation
     });
   }
+
+  cancel() {
+    this.selectedTopic = null;
+  }
 }
+

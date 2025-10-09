@@ -1,0 +1,86 @@
+<div class="admin-container">
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <mat-tab-group mat-align-tabs="center">
+    <!-- ADD QUESTION TAB -->
+    <mat-tab label="➕ Add Question">
+      <div class="tab-content">
+        <form [formGroup]="questionForm" (ngSubmit)="addQuestion()" class="form">
+          <div class="row">
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Topic</mat-label>
+              <mat-select formControlName="topic" required>
+                <mat-option *ngIf="loadingTopics" disabled>Loading topics...</mat-option>
+                <mat-option *ngFor="let topic of topics" [value]="topic.id">
+                  {{ topic.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Correct Answer</mat-label>
+              <mat-select formControlName="correct_answer" required>
+                <mat-option value="A">A</mat-option>
+                <mat-option value="B">B</mat-option>
+                <mat-option value="C">C</mat-option>
+                <mat-option value="D">D</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Question</mat-label>
+            <textarea matInput formControlName="question_text" rows="3"></textarea>
+          </mat-form-field>
+
+          <div class="choices">
+            <mat-form-field appearance="fill" class="choice">
+              <mat-label>Choice A</mat-label>
+              <input matInput formControlName="choice_a">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="choice">
+              <mat-label>Choice B</mat-label>
+              <input matInput formControlName="choice_b">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="choice">
+              <mat-label>Choice C</mat-label>
+              <input matInput formControlName="choice_c">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="choice">
+              <mat-label>Choice D</mat-label>
+              <input matInput formControlName="choice_d">
+            </mat-form-field>
+          </div>
+
+          <div class="button-row">
+            <button mat-raised-button color="primary" type="submit" [disabled]="questionForm.invalid">
+              Add Question
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <!-- ADD TOPIC TAB -->
+    <mat-tab label="📘 Add Topic">
+      <div class="tab-content">
+        <form [formGroup]="topicForm" (ngSubmit)="addTopic()" class="form">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Topic Name</mat-label>
+            <input matInput formControlName="name" required>
+          </mat-form-field>
+
+          <div class="button-row">
+            <button mat-raised-button color="accent" type="submit" [disabled]="topicForm.invalid">
+              Add Topic
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { QuizService } from '../../services/quiz.service';
 
 @Component({
   selector: 'app-quiz',
@@ -23,12 +24,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class QuizComponent {
   topic: any;
+  score = 0;
   questions: any[] = [];
   currentIndex = 0;
   selected: string | null = null;
   isAnswered = false;
-
-  constructor(private router: Router) {
+  constructor(private router: Router, private quizService: QuizService) {
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as { topic: any; questions: any[] };
     if (state) {
@@ -45,9 +46,15 @@ export class QuizComponent {
   }
 
   selectChoice(choice: string) {
+    console.log('Selected:', choice);
+    console.log('Correct:', this.currentQuestion.correct_choice);
     if (this.isAnswered) return;
     this.selected = choice;
     this.isAnswered = true;
+
+    if (choice === this.currentQuestion.correct_choice) {
+      this.score++;
+    }
   }
 
   nextQuestion() {
@@ -57,6 +64,11 @@ export class QuizComponent {
     if (this.currentIndex < this.questions.length - 1) {
       this.currentIndex++;
     } else {
+      // update service before navigating
+      this.quizService.score = this.score;
+      this.quizService.totalQuestions = this.questions.length;
+      this.quizService.currentTopic = this.topic.name;
+
       this.router.navigate(['/result']);
     }
   }

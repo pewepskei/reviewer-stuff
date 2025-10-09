@@ -7,8 +7,11 @@ export class QuizService {
   private apiUrl = 'http://localhost:8000/api';
   topics$ = new BehaviorSubject<any[]>([]);
   questions$ = new BehaviorSubject<any[]>([]);
+
+  // shared session state
   currentTopic = '';
   score = 0;
+  totalQuestions = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -23,15 +26,22 @@ export class QuizService {
 
   fetchQuestions(topic: string, limit: string) {
     this.currentTopic = topic;
-    return this.http.get(`${this.apiUrl}/questions/?topic=${topic}&limit=${limit}`).pipe(
-      map((res: any) => {
-        res.forEach((q: any) => {
-          q.choices = q.choices.sort(() => Math.random() - 0.5);
-        });
-        this.questions$.next(res);
-        return res;
-      })
-    );
+    // reset score here for a fresh session
+    this.score = 0;
+    return this.http
+      .get(`${this.apiUrl}/questions/?topic=${topic}&limit=${limit}`)
+      .pipe(
+        map((res: any) => {
+          // ensure choices exist and randomize order for frontend
+          res.forEach((q: any) => {
+            q.choices = q.choices || [];
+            q.choices = q.choices.sort(() => Math.random() - 0.5);
+          });
+          this.questions$.next(res);
+          this.totalQuestions = Array.isArray(res) ? res.length : 0;
+          return res;
+        })
+      );
   }
 }
 
